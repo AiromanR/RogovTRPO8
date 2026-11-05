@@ -1,0 +1,6 @@
+@RogovTRPO8_HostAddress = http://localhost:5283
+
+GET {{RogovTRPO8_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

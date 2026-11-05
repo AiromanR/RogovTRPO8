@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace RogovTRPO8.Models;
+
+public partial class Task
+{
+    public int Id { get; set; }
+
+    public string Title { get; set; } = null!;
+
+    public string? Description { get; set; }
+
+    public string OwnerLogin { get; set; } = null!;
+
+    public bool IsCompleted { get; set; }
+
+    public virtual User IdNavigation { get; set; } = null!;
+}
