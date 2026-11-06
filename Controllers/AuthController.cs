@@ -13,8 +13,6 @@ namespace RogovTRPO8.Controllers
     [Route("api/v1/auth")]
     public class AuthController : ControllerBase
     {
-        static private readonly RogovDbContext _db = DBService.Instance.Context; 
-        
         private readonly List<User> _users;
         private readonly IPasswordHasher<User> _hasher;
         private readonly IConfiguration _configuration;
@@ -24,7 +22,7 @@ namespace RogovTRPO8.Controllers
             IConfiguration configuration
         )
         {
-            _users = _db.Users.ToList();
+            _users = AuthService.GetUsersFromDb();
             _hasher = hasher;
             _configuration = configuration;
         }
@@ -38,8 +36,7 @@ namespace RogovTRPO8.Controllers
             var user = new User { Login = request.Login, Role = "User" };
             user.PasswordHash = _hasher.HashPassword(user, request.Password);
             _users.Add(user);
-            _db.Users.Add(user);
-            _db.SaveChanges();
+            AuthService.UserSaveToDb(user);
             return Ok("Пользователь зарегистрирован");
         }
 

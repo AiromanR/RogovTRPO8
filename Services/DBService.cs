@@ -5,8 +5,8 @@ namespace RogovTRPO8.Services
 {
     public class DBService
     {
-        private RogovDbContext context;
-        public RogovDbContext Context => context;
+        private TaskManagerDbContext context;
+        public TaskManagerDbContext Context => context;
         private static DBService? instance;
         public static DBService Instance
         {
@@ -19,7 +19,7 @@ namespace RogovTRPO8.Services
         }
         private DBService()
         {
-            context = new RogovDbContext( );
+            context = new TaskManagerDbContext( );
         }
     }
 }

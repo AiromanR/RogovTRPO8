@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RogovTRPO8")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+779c835e1a32d7897bac4d3461030f60e79a085f")]
 [assembly: System.Reflection.AssemblyProductAttribute("RogovTRPO8")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RogovTRPO8")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
