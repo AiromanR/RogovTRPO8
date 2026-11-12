@@ -17,19 +17,19 @@ namespace RogovTRPO8.Controllers
         private readonly IPasswordHasher<User> _hasher;
         private readonly IConfiguration _configuration;
         public AuthController (
-            List<User> users, 
+            List<User> users,
             IPasswordHasher<User> hasher,
             IConfiguration configuration
         )
         {
-            _users = AuthService.GetUsersFromDb();
+            _users = AuthService.GetUsersFromDb( );
             _hasher = hasher;
             _configuration = configuration;
         }
         public record AuthRequest (string Login, string Password);
 
         [HttpPost("register")]
-        public IActionResult Register(AuthRequest request)
+        public IActionResult Register (AuthRequest request)
         {
             if (_users.Any(u => u.Login == request.Login))
                 return Conflict("Логин уже существует");
@@ -41,36 +41,36 @@ namespace RogovTRPO8.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(AuthRequest request)
+        public IActionResult Login (AuthRequest request)
         {
             var user = _users.Find(u => u.Login == request.Login);
 
-            if (user == null) 
+            if (user == null)
                 return Unauthorized("Неверная пара логин/пароль");
 
             var result = _hasher.VerifyHashedPassword(
-                user, 
-                user.PasswordHash, 
+                user,
+                user.PasswordHash,
                 request.Password
             );
 
-            if (result == PasswordVerificationResult.Failed) 
+            if (result == PasswordVerificationResult.Failed)
                 return Unauthorized("Неверная пара логин/пароль");
 
             var token = GenerateJwtToken(user);
 
             return Ok(new
             {
-                access_token=token
+                access_token = token
             });
         }
-        private string GenerateJwtToken(User user) 
-        { 
-            var claims = new [ ] 
-            { 
-                new Claim(ClaimTypes.Name, user.Login), 
-                new Claim(ClaimTypes.Role, user.Role) 
-            }; 
+        private string GenerateJwtToken (User user)
+        {
+            var claims = new [ ]
+            {
+                new Claim(ClaimTypes.Name, user.Login),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration [ "Jwt:Key" ]!));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -78,11 +78,11 @@ namespace RogovTRPO8.Controllers
                 issuer: "ExampleApi",
                 audience: "ExampleApiClient",
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30), 
+                expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: credentials
-            
+
             );
-            return new JwtSecurityTokenHandler().WriteToken(token); 
+            return new JwtSecurityTokenHandler( ).WriteToken(token);
         }
     }
 }

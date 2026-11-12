@@ -5,21 +5,21 @@ namespace RogovTRPO8.Services
 {
     public class DBService
     {
-        private TaskManagerDbContext context;
-        public TaskManagerDbContext Context => context;
+        private RogovDbContext context;
+        public RogovDbContext Context => context;
         private static DBService? instance;
         public static DBService Instance
         {
             get
             {
                 if (instance == null)
-                    instance = new DBService();
+                    instance = new DBService( );
                 return instance;
             }
         }
-        private DBService()
+        private DBService ()
         {
-            context = new TaskManagerDbContext( );
+            context = new RogovDbContext( );
         }
     }
 }

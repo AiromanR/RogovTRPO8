@@ -12,7 +12,7 @@ using static RogovTRPO8.Models.DTOs;
 //Jwt key = ReplaceThisWithARandomSecretOfAtLeast32BytesRogov
 namespace RogovTRPO8.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/tasks")]
     [ApiController]
     [Authorize]
     public class TasksController : ControllerBase
@@ -20,14 +20,14 @@ namespace RogovTRPO8.Controllers
 
         [HttpGet("all")]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetTasksAll()
+        public IActionResult GetTasksAll ()
         {
-            return Ok(TaskService.GetTasks());
+            return Ok(TaskService.GetTasks( ));
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin, User")]
-        public IActionResult GetTasksOwn()
+        public IActionResult GetTasksOwn ()
         {
             string? userName = User.Identity?.Name;
 
@@ -38,64 +38,67 @@ namespace RogovTRPO8.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin, User")]
-        public IActionResult GetTasksId(int id)
+        public IActionResult GetTasksId (int id)
         {
             string? userName = User.Identity?.Name;
 
             var task = TaskService.GetTasks(id);
 
-            if (task == null) return NotFound();
+            if (task == null) return NotFound( );
 
             if (User.IsInRole("Admin") || task.OwnerLogin == userName)
             {
                 return Ok(task);
-            }   return Forbid();
+            }
+            return Forbid( );
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin, User")]
-        public IActionResult CreateTask(TaskDTO titleDesc)
+        public IActionResult CreateTask (TaskDTO titleDesc)
         {
-            if (titleDesc.title.IsNullOrEmpty() || titleDesc.description.IsNullOrEmpty()) return BadRequest("Поля должны быть не пустыми");
+            if (titleDesc.title.IsNullOrEmpty( ) || titleDesc.description.IsNullOrEmpty( )) return BadRequest( );
 
             string? userName = User.Identity?.Name;
             var task = TaskService.CreateTask(titleDesc, userName);
-            return Created($"api/v1/Tasks/{task.Id}", task);
+            return Created($"api/v1/tasks/{task.Id}", task);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin, User")]
-        public IActionResult EditTask(int id, TaskDTOIsCompleted titleDescComp)
+        public IActionResult EditTask (int id, TaskDTOIsCompleted titleDescComp)
         {
             string? userName = User.Identity?.Name;
 
             var task = TaskService.GetTasks(id);
 
-            if (task == null) return NotFound();
+            if (task == null) return NotFound( );
 
             if (User.IsInRole("Admin") || task.OwnerLogin == userName)
             {
                 return Ok(TaskService.EditTask(titleDescComp, task));
-            }   return Forbid();
+            }
+            return Forbid( );
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin, User")]
-        public IActionResult DeleteTask(int id)
+        public IActionResult DeleteTask (int id)
         {
-            string? userName = User.Identity?.Name; 
+            string? userName = User.Identity?.Name;
 
             var task = TaskService.GetTasks(id);
 
-            if (task == null) return NotFound();
+            if (task == null) return NotFound( );
 
             if (User.IsInRole("Admin") || task.OwnerLogin == userName)
             {
                 if (TaskService.DeleteTask(task))
                 {
-                    return NoContent();
+                    return NoContent( );
                 }
-            }   return Forbid();
+            }
+            return Forbid( );
         }
     }
 }

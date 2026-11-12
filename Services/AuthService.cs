@@ -4,15 +4,16 @@ namespace RogovTRPO8.Services
 {
     static public class AuthService
     {
-        static private readonly TaskManagerDbContext _db = DBService.Instance.Context;
+        static private readonly RogovDbContext _db = DBService.Instance.Context;
 
-        static public List<User> GetUsersFromDb()
+        static public List<User> GetUsersFromDb ()
         {
-            return _db.Users.ToList();
+            return _db.Users.ToList( );
         }
-        static public void UserSaveToDb(User user) {
+        static public void UserSaveToDb (User user)
+        {
             _db.Users.Add(user);
-            _db.SaveChanges();
+            _db.SaveChanges( );
         }
     }
 }
